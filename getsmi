@@ -29,7 +29,7 @@ FILE2SIZE=`ls -rlt "/root/anismi/sent/$FILE1" | tail -1 | awk '{print $5}'`
   fi
 fi
 
-# 받은 파일에서 회차 숫자를 찾아내서 회차를 두자리수로 변경  ex) 진격의 거인 2기 3화 -> 03
+# 받은 파일에서 회차 숫자를 찾아내서 회차를 두자리수로 변경  ex) 진격의 거인 2기 3화.smi -> 03
 NUM1=`echo "$FILE1" | tail -1 | grep -o -E '[0-9]+' | tail -1`
 NUM2=`printf "%02d " $NUM1 | cut -c 1-2`
 
