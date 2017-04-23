@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# 진격의 거인 자막 파일 받기 (자막 블러거 : http://blog.naver.com/qtr01122)
+# shell 작성자 : 크루이더 
+# 2017. 4. 23
+
+
+# 자막러 최신 자막 블로그 주소 알아내기
+curl http://www.anissia.net/anitime/cap?i=3310 | sed s/:/\\n/g | grep qtr01122 | cut -d '"' -f 2 > /tmp/ani/blogfile
+SMIURL=`cat /tmp/ani/blogfile`
+
+# 자막파일 받을 위치 이동
+cd /root/anismi
+
+# 자막파일 받기
+/usr/bin/python3 /root/gmf_nb.py http://$SMIURL
+rm -f /tmp/ani/blogfile
+
+FILE1=`ls -rt 진격의*.smi`
+FILE1SIZE=`ls -rlt 진격의*.smi | awk '{print $5}'`
+
+# 새로 받은 자막파일이 기존 보낸 자막파일과 사이즈가 같다면 쉘스크립트 종료
+if [ -f "/root/anismi/sent/$FILE1" ] ; then
+FILE2SIZE=`ls -rlt "/root/anismi/sent/$FILE1" | tail -1 | awk '{print $5}'`
+  if [ $FILE1SIZE -eq $FILE2SIZE ] ; then
+    rm -f "/root/anismi/$FILE1"
+    exit 0
+  fi
+fi
+
+# 받은 파일에서 회차 숫자를 찾아내서 회차를 두자리수로 변경  ex) 진격의 거인 2기 3화 -> 03
+NUM1=`echo "$FILE1" | tail -1 | grep -o -E '[0-9]+' | tail -1`
+NUM2=`printf "%02d " $NUM1 | cut -c 1-2`
+
+# 자막파일을 해당 위치에 복사 (애니가 있는곳이 같은 위치라면 cp 명령어로)
+scp "$FILE1" root@192.168.0.7:"/volume3/'TV Shows'/'진격의 거인'/'[Ohys-Raws] Shingeki no Kyojin Season 2 - $NUM2 (MX 1280x720 x264 AAC).smi'"
+
+# 자막파일 복사후에는 sent 디렉토리로 이동
+mv "/root/anismi/$FILE1" "/root/anismi/sent/$FILE1"
