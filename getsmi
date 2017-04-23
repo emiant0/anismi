@@ -8,13 +8,14 @@
 # 자막러 최신 자막 블로그 주소 알아내기
 curl http://www.anissia.net/anitime/cap?i=3310 | sed s/:/\\n/g | grep qtr01122 | cut -d '"' -f 2 > /tmp/ani/blogfile
 SMIURL=`cat /tmp/ani/blogfile`
+rm -f /tmp/ani/blogfile
 
 # 자막파일 받을 위치 이동
 cd /root/anismi
 
 # 자막파일 받기
 /usr/bin/python3 /root/gmf_nb.py http://$SMIURL
-rm -f /tmp/ani/blogfile
+
 
 FILE1=`ls -rt 진격의*.smi`
 FILE1SIZE=`ls -rlt 진격의*.smi | awk '{print $5}'`
