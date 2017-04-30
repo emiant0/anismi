@@ -6,9 +6,9 @@
 
 
 # 자막러 최신 자막 블로그 주소 알아내기
-curl http://www.anissia.net/anitime/cap?i=3310 | sed s/:/\\n/g | grep qtr01122 | cut -d '"' -f 2 > /tmp/ani/blogfile
+curl http://www.anissia.net/anitime/cap?i=3310 | sed s/:/\\n/g | grep qtr01122 | cut -d '"' -f 2 > /tmp/aniblogfile
 SMIURL=`cat /tmp/ani/blogfile`
-rm -f /tmp/ani/blogfile
+rm -f /tmp/aniblogfile
 
 # 자막파일 받을 위치 이동
 cd /root/anismi
